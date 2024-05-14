@@ -41,7 +41,7 @@ def check_hour_format():
     return False
 
 def on_exec_click(event=None):
-    global is_active, after_counter_id, after_flood_id, is_executed
+    global is_active, after_counter_id, after_flood_id, is_executed, refresh_time
 
     not_valid = False
     if not is_active:
@@ -66,6 +66,7 @@ def on_exec_click(event=None):
             label_counter.after_cancel(after_counter_id)
         if after_flood_id is not None:
             app.after_cancel(after_flood_id)
+            refresh_time = 5000
             is_executed = False
 
 def on_hour_input(event):
@@ -105,7 +106,6 @@ def get_data():
     pyautogui.press('enter')
 
     after_flood_id = app.after(refresh_time, get_data)
-    
 
 ################# WINDOW INIT #################
 app = CTk()
