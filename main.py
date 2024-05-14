@@ -24,8 +24,8 @@ def count(secs, label):
         secs -= 1
         rest = secs%3600
         hh = secs//3600
-        mm = (rest//60)+1
-        time_left = f"Exécution dans {hh:02} heure(s) et {mm:02} minute(s)."
+        mm = (rest//60)
+        time_left = f"Exécution dans {hh:02} heure(s) et {mm+1:02} minute(s)."
         label.configure(text=time_left)
         after_counter_id = label.after(1000, count, secs, label)
     else:
