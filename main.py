@@ -81,6 +81,8 @@ def on_terminus_input(event=None):
 
 def get_data():
     global refresh_time, target, after_flood_id
+    pyautogui.press('f5')
+    pyautogui.press('enter')
     pyautogui.hotkey('ctrl', 'a')
     pyautogui.hotkey('ctrl', 'c')
 
@@ -101,9 +103,6 @@ def get_data():
             refresh_time = 60000
     else:
         refresh_time = 5000
-
-    pyautogui.press('f5')
-    pyautogui.press('enter')
 
     after_flood_id = app.after(refresh_time, get_data)
 
