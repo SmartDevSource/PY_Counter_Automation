@@ -1,0 +1,2 @@
+Direction : Georges Halgoult | Horaire de passage : 15:27
+Direction :     data_target = [e for e in data_pasted if "A l'arrêt" in e and target in e] | Horaire de passage : 15:34
