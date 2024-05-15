@@ -132,7 +132,7 @@ ipt_direction.bind("<Return>", lambda e: "break")
 ipt_direction.bind("<KeyPress>", on_terminus_input)
 
 label_launchtime = CTkLabel(master=app, 
-                 text="Heure d'exécution (exemple : 06:30)",
+                 text="Executer dans (exemple : 06:30)",
                  font=CTkFont(family="Arial", size=18)
                 )
 label_launchtime.place(relx= .5, rely=.35, anchor="center")
