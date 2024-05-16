@@ -10,3 +10,9 @@ def to_seconds(hh_mm):
     # curr = (ch*3600) + (cm*60)
 
     return next
+
+def round_to_half(h):
+    s = h.split(':')
+    hh, mm = s[0], s[1]
+    round_mm = 30 if int(mm)/60 >= .5 else 0
+    return f"{hh}:{round_mm:02}"

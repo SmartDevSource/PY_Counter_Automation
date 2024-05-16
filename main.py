@@ -1,17 +1,34 @@
 import pyautogui
 import pyperclip
 import re
+import random
 from customtkinter import *
 from functions import *
 
 ################# DECLARATIONS #################
 start_hour = ""
 target = ""
+has_stopped = False
+incoming = None
 is_active = False
 is_executed = False
 after_counter_id = None
 after_flood_id = None
 refresh_time = 5000
+
+averages = {
+    "06:00": (10,2,10),
+    "06:30": (15,4,15),
+    "07:00": (20,8,20),
+    "07:30": (25,8,20),
+    "08:00": (30,12,25),
+    "08:30": (35,14,30),
+    "09:00": (30,12,25),
+    "09:30": (25,8,20),
+    "10:00": (18,6,15),
+    "10:30": (15,5,15),
+    "11:00": (15,5,15)
+}
 
 ################# CALL FUNCTIONS #################
 def start_counter(start_hour, label):
@@ -41,7 +58,7 @@ def check_hour_format():
     return False
 
 def on_exec_click(event=None):
-    global is_active, after_counter_id, after_flood_id, is_executed, refresh_time
+    global is_active, after_counter_id, after_flood_id, is_executed, refresh_time, target
 
     not_valid = False
     if not is_active:
@@ -57,6 +74,8 @@ def on_exec_click(event=None):
 
     if is_active:
         btn_exec.configure(text="Stopper l'exécution", fg_color="#E50000", hover_color="#FF3131", text_color="white")
+        target = ipt_direction.get("1.0", "end-1c")
+
     else:
         btn_exec.configure(text="Exécuter le script", fg_color="#32CD32", hover_color="#0FFF50", text_color="black")
         if not not_valid: label_counter.configure(text="")
@@ -80,31 +99,54 @@ def on_terminus_input(event=None):
     target = ipt_direction.get("1.0", "end-1c")
 
 def get_data():
-    global refresh_time, target, after_flood_id
+    global refresh_time, target, after_flood_id, has_stopped, incoming
     pyautogui.press('f5')
     pyautogui.press('enter')
     pyautogui.hotkey('ctrl', 'a')
     pyautogui.hotkey('ctrl', 'c')
 
     data_pasted = pyperclip.paste().split('\n')
-    data_target = [e for e in data_pasted if "A l'arrêt" in e and target in e]
-    direction = None
+    data_stop = [e for e in data_pasted if "A l'arrêt" in e and target in e]
+    data_incoming = [e for e in data_pasted if "A l'approche" in e and target in e]
 
-    if len(data_target) > 0:
-        direction = data_target[0].split('\t')[0]
+    if len(data_incoming) == 0 and len(data_stop) == 0 and incoming is not None:
+        put_data()
+        incoming = None
+
+    if len(data_incoming) > 0:
+        incoming = target
+
+    if len(data_stop) == 0 and has_stopped:
+        has_stopped = False
+
+    if len(data_stop) > 0 and not has_stopped:
+        put_data()
+        has_stopped = True
+
+    after_flood_id = app.after(refresh_time, get_data)
+
+def put_data():
+        global target
+
         localtime = time.localtime(time.time())
         human_hour = f"{localtime.tm_hour:02}:{localtime.tm_min:02}"
+        average = averages.get(round_to_half(human_hour), (20,10,20))
+        get_on = random.randint(0, average[0])
+        get_off = random.randint(0, average[1])
+        still_in = random.randint(0, average[2])
 
-        data_to_put = f"Direction : {direction} | Horaire de passage : {human_hour}\n"
+        data_to_put = "_________________________________________________________________\n"
+        data_to_put += f"Direction : {target}\n"
+        data_to_put += f"Horaire de passage : {human_hour}\n"
+        data_to_put += f"Monte : {get_on}\n"
+        data_to_put += f"Descend : {get_off}\n"
+        data_to_put += f"Reste : {still_in}\n"
+        data_to_put += "_________________________________________________________________\n"
+        data_to_put += "\n"
 
         with open("horaires.txt", '+a', encoding='utf-8') as file:
             file.write(data_to_put)
             file.close()
-            refresh_time = 60000
-    else:
-        refresh_time = 5000
-
-    after_flood_id = app.after(refresh_time, get_data)
 
 ################# WINDOW INIT #################
 app = CTk()

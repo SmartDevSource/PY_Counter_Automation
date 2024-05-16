@@ -1,0 +1,16 @@
+_________________________________________________________________
+Direction : École Vétérinaire de Maisons-Alfort
+Horaire de passage : 11:14
+Monte : 12
+Descend : 4
+Reste : 15
+_________________________________________________________________
+
+_________________________________________________________________
+Direction : École Vétérinaire de Maisons-Alfort
+Horaire de passage : 11:18
+Monte : 9
+Descend : 3
+Reste : 7
+_________________________________________________________________
+
