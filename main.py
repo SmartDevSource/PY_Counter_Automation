@@ -133,7 +133,7 @@ def put_data():
         average = averages.get(round_to_half(human_hour), (20,10,20))
         get_on = random.randint(0, average[0])
         get_off = random.randint(0, average[1])
-        still_in = random.randint(average[0] + 1, average[2])
+        still_in = random.randint(average[0], average[2])
 
         data_to_put = "_________________________________________________________________\n"
         data_to_put += f"Direction : {target}\n"
